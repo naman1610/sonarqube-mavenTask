@@ -50,14 +50,16 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 echo 'Running SonarQube analysis...'
-                bat '''
-                set PATH=%MAVEN_PATH%;%PATH%
-                mvn clean verify sonar:sonar \
-                -Dsonar.projectKey=naman-assignment2-maven \
-                -Dsonar.projectName='naman assignment2 maven' \
-                -Dsonar.host.url=http://localhost:9000 \
-                -Dsonar.token=%SONAR_TOKEN%
-                '''
+                withSonarQubeEnv('SonarQube') {
+                    bat '''
+                    set PATH=%MAVEN_PATH%;%PATH%
+                    mvn clean verify sonar:sonar \
+                    -Dsonar.projectKey=naman-assignment2-maven \
+                    -Dsonar.projectName='naman assignment2 maven' \
+                    -Dsonar.host.url=http://localhost:9000 \
+                    -Dsonar.token=%SONAR_TOKEN%
+                    '''
+                }
             }
         }
     }
